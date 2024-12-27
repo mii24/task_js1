@@ -62,34 +62,27 @@ function reset() {
     resetButton.disabled = true;
 }
 
-// 時間を計測（再帰関数）
+// 1時間 = 3600秒 = 3600 * 1000ミリ秒
+const ONE_HOUR_IN_MS = 3600000;
+const ONE_MINUTE_IN_MS = 60000;
+const ONE_SECOND_IN_MS = 1000;
+
 function measureTime() {
   // タイマーを設定
-    timer = setTimeout(function () {
-        // 経過時間を設定し、画面へ表示（[現在の時刻] – [開始時間] + [保持している時間]）
-        elapsedTime = Date.now() - startTime + holdTime;
+  timer = setTimeout(function () {
+    // 経過時間を設定し、画面へ表示（[現在の時刻] – [開始時間] + [保持している時間]）
+    elapsedTime = Date.now() - startTime + holdTime;
 
-        //1時間 = 3600秒 = 3600 * 1000ミリ秒
-        let hours = Math.floor(elapsedTime / 3600000);
+    let hours = Math.floor(elapsedTime / ONE_HOUR_IN_MS);
 
-        //経過時間を3600000で割った余りを計算。これにより、1時間未満の経過時間が得られる
-        //その結果を60000（1分 = 60秒 = 60 * 1000ミリ秒）で割ることで、経過時間を分単位に変換
-        //Math.floorを使って小数点以下を切り捨て、整数部分だけを取得
-        let minutes = Math.floor((elapsedTime % 3600000) / 60000);
+    let minutes = Math.floor((elapsedTime % ONE_HOUR_IN_MS) / ONE_MINUTE_IN_MS);
 
-        //経過時間を60000で割った余りを計算。これにより、1分未満の経過時間が得られる
-        // その結果を1000（1秒 = 1000ミリ秒）で割ることで、経過時間をる秒単位に変換
-        // Math.floorを使って小数点以下を切り捨て、整数部分だけを取得
-        let seconds = Math.floor((elapsedTime % 60000) / 1000);
+    let seconds = Math.floor((elapsedTime % ONE_MINUTE_IN_MS) / ONE_SECOND_IN_MS);
 
-        //経過時間を1000で割った余りを計算します。これにより、1秒未満の経過時間が得られる
-        // その結果を100で割ることで、ミリ秒を1桁に変換
-        // （例えば、123ミリ秒なら1.23となり、Math.floorで1）
-        // Math.floorを使って小数点以下を切り捨て、整数部分だけを取得
-        let milliseconds = Math.floor((elapsedTime % 1000) / 100); // ミリ秒を1桁にする
-        showTime.textContent = hours + ":" + minutes + ":" + seconds + ":" + milliseconds;
+    let milliseconds = Math.floor((elapsedTime % ONE_SECOND_IN_MS) / 100); // ミリ秒を1桁にする
+    showTime.textContent = hours + ":" + minutes + ":" + seconds + ":" + milliseconds;
 
-      // 関数を呼び出し、時間計測を継続する
-        measureTime();
-    }, 10);
+    // 関数を呼び出し、時間計測を継続する
+    measureTime();
+  }, 10);
 }
